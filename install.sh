@@ -95,7 +95,7 @@ copy_from_to() {
 ## INSTALL #####################################################################
 ################################################################################
 cprint -p "Installing NixHyper Dotfiles.."
-cprint "This will setup zsh, nvim, git, and alacritty"
+cprint "This will setup looking-glass, zsh, nvim, git, and alacritty"
 
 # would you like to continue
 read -p "Continue? (y/n) " -n 1 -r
@@ -103,6 +103,20 @@ echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   exit 1
 fi
+
+
+################################################################################
+## LOOKING-GLASS ###############################################################
+################################################################################
+cprint -p "Installing Looking-Glass Dotfiles.."
+
+# run the common commands here
+cprint "Old Files: backing up or removing symlinks.."
+backup_or_remove "$HOME/.config/looking-glass/client.ini"
+
+cprint "Creating new directories.."
+mkdir -p "$HOME/.config/looking-glass"
+ln -s "$HOME/bin/nixhyper/looking-glass/client.ini" "$HOME/.config/looking-glass/client.ini"
 
 
 ################################################################################
