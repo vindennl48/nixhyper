@@ -12,7 +12,7 @@ option_as_alt = "Both"
 ## to search for a font
 ## run `fc-list : family style | grep <name>
 [font]
-size          = 14
+size          = 12
 # normal.family = "BlexMono Nerd Font"
 # normal.family = "DejaVuSansM Nerd Font Mono"
 # normal.family = "CodeNewRoman Nerd Font"
