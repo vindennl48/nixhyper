@@ -35,7 +35,7 @@ backup() {
   # for all files listed as arguments
   for file in "$@"; do
     # rename the file with .bak
-    mv "$file" "${file}.bak"
+    sudo mv "$file" "${file}.bak"
   done
 }
 
@@ -45,7 +45,7 @@ backup_or_remove() {
   if [ -e "$destination" ]; then
     if [ -L "$destination" ]; then
       cprint "Removing symlink: $destination"
-      rm "$destination"
+      sudo rm "$destination"
     else
       backup "$destination"
       # local backup_file="${destination}.bak"
@@ -53,49 +53,14 @@ backup_or_remove() {
       # mv "$destination" "$backup_file"
     fi
   fi
-}
-
-copy_from_to() {
-  local source="$1"
-  local destination="$2"
-
-  if [ ! -e "$source" ]; then
-    cprint "File not found: $source"
-    return 1
-  fi
-
-  # check if the destination file exists
-  if [ -e "$destination" ]; then
-    # check if the destination file is a symlink
-    if [ -L "$destination" ]; then
-      cprint "Removing symlink: $destination"
-      rm "$destination"
-    else
-      # backup the destination file
-      backup "$destination"
-      # local backup_file="${destination}.bak"
-      # cprint "Renaming $destination to $backup_file"
-      # mv "$destination" "$backup_file"
-    fi
-  fi
-
-  # check if the source file is a folder
-  if [ -d "$source" ]; then
-    cp -r "$source" "$destination"
-  else
-    cp "$source" "$destination"
-  fi
-
-  cprint "Copied $source to $destination"
-  return 0
 }
 
 
 ################################################################################
 ## INSTALL #####################################################################
 ################################################################################
-cprint -p "Installing NixHyper Dotfiles.."
-cprint "This will setup looking-glass, zsh, nvim, git, and alacritty"
+cprint -p "Installing NixHyper and Dotfiles.."
+cprint "This will setup NixOS, looking-glass, zsh, nvim, git, and alacritty"
 
 # would you like to continue
 read -p "Continue? (y/n) " -n 1 -r
@@ -106,9 +71,22 @@ fi
 
 
 ################################################################################
+## NIXOS #######################################################################
+################################################################################
+cprint -p "Setting Up NixOS"
+
+# run the common commands here
+cprint "Old Files: backing up or removing symlinks.."
+backup_or_remove "/etc/nixos"
+
+cprint "Creating new directories.."
+ln -s "$HOME/bin/nixhyper/nixos" "/etc/nixos"
+
+
+################################################################################
 ## LOOKING-GLASS ###############################################################
 ################################################################################
-cprint -p "Installing Looking-Glass Dotfiles.."
+cprint -p "Setting Up Looking-Glass Dotfiles.."
 
 # run the common commands here
 cprint "Old Files: backing up or removing symlinks.."
@@ -122,7 +100,7 @@ ln -s "$HOME/bin/nixhyper/looking-glass/client.ini" "$HOME/.config/looking-glass
 ################################################################################
 ## ZSH #########################################################################
 ################################################################################
-cprint -p "Installing ZSH Dotfiles.."
+cprint -p "Setting Up ZSH Dotfiles.."
 
 # run the common commands here
 cprint "Old Files: backing up or removing symlinks.."
@@ -136,7 +114,7 @@ ln -s "$HOME/bin/nixhyper/zsh/zshrc" "$HOME/.zshrc"
 ################################################################################
 ## NEOVIM ######################################################################
 ################################################################################
-cprint -p "Installing NVIM Dotfiles.."
+cprint -p "Setting Up NVIM Dotfiles.."
 
 # run the common commands here
 cprint "Old Files: backing up or removing symlinks.."
@@ -155,7 +133,7 @@ git clone https://github.com/junegunn/vim-plug.git "$HOME/.local/share/nvim/plug
 ################################################################################
 ## GIT #########################################################################
 ################################################################################
-cprint -p "Installing Git Dotfiles.."
+cprint -p "Setting Up Git Dotfiles.."
 cprint "Old Files: backing up or removing symlinks.."
 backup_or_remove "$HOME/.gitconfig"
 
@@ -166,7 +144,7 @@ ln -s "$HOME/bin/nixhyper/git/gitconfig" "$HOME/.gitconfig"
 ################################################################################
 ## ALACRITTY ###################################################################
 ################################################################################
-cprint -p "Installing Alacritty Dotfiles.."
+cprint -p "Setting Up Alacritty Dotfiles.."
 
 # run the common commands here
 cprint "Old Files: backing up or removing symlinks.."
@@ -175,3 +153,9 @@ backup_or_remove "$HOME/.config/alacritty"
 cprint "Creating new directories.."
 mkdir -p "$HOME/.config"
 ln -s "$HOME/bin/nixhyper/alacritty" "$HOME/.config/alacritty"
+
+################################################################################
+################################################################################
+
+cprint -p "Done setting up dotfiles! Please rebuild and reboot."
+
