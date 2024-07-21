@@ -97,7 +97,7 @@ alias hdsize='df -H'
 ################################################################################
 alias nixconf="nvim ~/bin/nixhyper/nixos/configuration.nix"
 alias nixclean="nix-collect-garbage --delete-old; sudo nix-collect-garbage -d; sudo /run/current-system/bin/switch-to-configuration boot"
-alias mountstorage="sudo mount /dev/nvme0n1p3 /storage"
+alias mount_storage="sudo mount /dev/nvme0n1p3 /storage"
 
 # Locations
 # alias lof='cd /Users/mitch/Documents/Code/Python/LOFUpload; python3 main.py'
