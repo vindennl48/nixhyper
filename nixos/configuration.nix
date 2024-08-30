@@ -29,6 +29,8 @@
       virt-manager virt-viewer spice spice-gtk spice-protocol win-virtio win-spice
       gnome.adwaita-icon-theme
       looking-glass-client
+      vlc
+      virtiofsd
     ];
 
     # Environment Variables
