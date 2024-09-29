@@ -105,11 +105,27 @@ alias mount_storage="sudo mount /dev/nvme0n1p3 /storage"
 # alias gc='cd ~/Documents/code/'
 alias go='cd'
 
-# Mount Network Drive WSL
-alias usbmount='sudo mount --mkdir -o uid=1000,gid=1000'
-alias mountwsl='sudo mkdir -p /mnt/z; sudo mount -t drvfs "\\192.168.1.5\sambashare" /mnt/z'
-alias mountarch='sudo mount --mkdir -t cifs //192.168.1.5/sambashare /mnt/z -o username=mitch,password='
+## Mount Stuff
+# argument drive and mount location
+# example: mount_usb /dev/sda1 /mnt/usb
+alias mount_usb='sudo mount --mkdir -o uid=1000,gid=1000'
 alias addGithubKey='mkdir -p ~/.ssh; cp /mnt/z/github/id_ed25519 ~/.ssh/.; sudo chmod 400 ~/.ssh/id_ed25519; eval $(ssh-agent -s); ssh-add ~/.ssh/id_ed25519'
+
+# argument password
+# example: mount_intstorage <password>
+mount_intstorage() {
+  sudo mount --mkdir -t cifs -o username=mitch,password=$1 //192.168.1.5/sambashare /mnt/intstorage
+}
+mount_extstorage() {
+  sudo mount --mkdir -t cifs -o username=mitch,password=$1 //192.168.1.3/sambashare /mnt/extstorage
+}
+alias mount_intstorage_windows='sudo mkdir -p /mnt/intstorage; sudo mount -t drvfs "\\192.168.1.5\sambashare" /mnt/intstorage'
+alias mount_extstorage_windows='sudo mkdir -p /mnt/extstorage; sudo mount -t drvfs "\\192.168.1.3\sambashare" /mnt/extstorage'
+
+# old stuff
+# alias usbmount='sudo mount --mkdir -o uid=1000,gid=1000'
+# alias mountwsl='sudo mkdir -p /mnt/z; sudo mount -t drvfs "\\192.168.1.5\sambashare" /mnt/z'
+# alias mountarch='sudo mount --mkdir -t cifs //192.168.1.5/sambashare /mnt/z -o username=mitch,password='
 
 # FZF
 alias gpp='cd $(find . -type d | fzf)'
